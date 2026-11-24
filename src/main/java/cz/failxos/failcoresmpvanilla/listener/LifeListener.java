@@ -62,7 +62,7 @@ public final class LifeListener implements Listener {
         }
     }
 
-    /** Zabijak dostane item srdce, zabity (pokud ma nad minimum) o jedno srdce prijde. */
+    /** LifeSteal: zabity prijde o srdce (nejnize na 1), zabijak ho dostane jako item. */
     private void pvpHeart(Player killer, Player victim, FileConfiguration cfg) {
         long cooldownMs = cfg.getLong("life.same-victim-cooldown-seconds", 600L) * 1000L;
         Map<UUID, Long> kills = recent.computeIfAbsent(killer.getUniqueId(), k -> new HashMap<>());
@@ -72,6 +72,23 @@ public final class LifeListener implements Listener {
             plugin.messages().send(killer, "life-cooldown", "%player%", victim.getName());
             return;
         }
+
+        boolean victimLost = false;
+        double loss = cfg.getDouble("life.victim-loses-hp", 2.0);
+        AttributeInstance victimAttr = victim.getAttribute(Attribute.MAX_HEALTH);
+        if (victimAttr != null && loss > 0) {
+            double min = cfg.getDouble("life.min-hp", 2.0);
+            double base = victimAttr.getBaseValue();
+            if (base > min) {
+                victimAttr.setBaseValue(Math.max(min, base - loss));
+                victimLost = true;
+                plugin.messages().send(victim, "life-lost", "%player%", killer.getName());
+            }
+        }
+        if (!victimLost && cfg.getBoolean("life.steal-only-if-victim-has-hearts", true)) {
+            plugin.messages().send(killer, "life-victim-min", "%player%", victim.getName());
+            return;
+        }
         kills.put(victim.getUniqueId(), now);
 
         Map<Integer, ItemStack> left = killer.getInventory().addItem(HeartItem.create(plugin, 1));
@@ -79,19 +96,6 @@ public final class LifeListener implements Listener {
             killer.getWorld().dropItemNaturally(killer.getLocation(), rest);
         }
         plugin.messages().send(killer, "life-gained", "%player%", victim.getName());
-
-        double loss = cfg.getDouble("life.victim-loses-hp", 2.0);
-        if (loss > 0) {
-            AttributeInstance victimAttr = victim.getAttribute(Attribute.MAX_HEALTH);
-            if (victimAttr != null) {
-                double min = cfg.getDouble("life.min-hp", 20.0);
-                double base = victimAttr.getBaseValue();
-                if (base > min) {
-                    victimAttr.setBaseValue(Math.max(min, base - loss));
-                    plugin.messages().send(victim, "life-lost", "%player%", killer.getName());
-                }
-            }
-        }
     }
 
     /** Pri smrti dropne X % srdci nad minimem (napr. 15 srdci -> 5 nad 10 -> 1,5 srdce). */
@@ -100,7 +104,7 @@ public final class LifeListener implements Listener {
         if (attr == null) {
             return;
         }
-        double min = cfg.getDouble("life.min-hp", 20.0);
+        double min = Math.max(cfg.getDouble("life.min-hp", 2.0), cfg.getDouble("life.death-drop-above-hp", 20.0));
         double base = attr.getBaseValue();
         double surplusHearts = (base - min) / 2.0;
         if (surplusHearts <= 0) {

@@ -56,10 +56,13 @@ life:
   enabled: true
   same-victim-cooldown-seconds: 600   # za stejnou obet se srdce znovu da az po case
   max-hp: 40.0                        # maximum zivotu (20 srdci) pri pouzivani srdci
-  min-hp: 20.0                        # 10 srdci - pod tuto hodnotu zivoty nikdy neklesnou
-  # zabity hrac (PvP) s vice nez min-hp: jedno srdce (2 HP) mu zmizi, pod min-hp nikdy
+  min-hp: 2.0                         # 1 srdce - pod tuto hodnotu zivoty nikdy neklesnou
+  # LifeSteal: zabity hrac (PvP) prijde o jedno srdce (2 HP), pod min-hp nikdy
   victim-loses-hp: 2.0
-  # pri smrti (jakekoli) s vice nez min-hp zivotu dropne tolik % srdci nad 10
+  # srdce dostane zabijak jen kdyz ho obet opravdu ztratila (obet na 1 srdci = nic k ukradeni)
+  steal-only-if-victim-has-hearts: true
+  # pri smrti (jakekoli) s vice nez death-drop-above-hp zivotu dropne tolik % srdci nad touto hranici
+  death-drop-above-hp: 20.0           # 10 srdci
   death-drop-percent: 30.0
 
 # Villageri / wandering trader - trady se nikdy nevycerpaji
@@ -70,6 +73,7 @@ villagers:
 recipes:
   ender-chest: true                  # 4x obsidian + eye of ender (plus)
   shulker-box: true                   # 4x diamant + chest (plus)
+  notch-apple: true                   # 4x gold block + netherite ingot (plus) = enchanted golden apple
   golden-apple: true                  # jablko + 4 gold ingoty
   anvil: true                         # 7 iron ingotu
   cobweb: true                        # 9 string -> 4 cobweb
@@ -131,5 +135,6 @@ messages:
   life-used: "<green>Pouzil jsi srdce. Mas <white>%hearts%</white> srdci."
   life-max: "<yellow>Uz mas maximum zivotu."
   life-cooldown: "<yellow>Za <white>%player%</white> jsi zivot dostal nedavno, tentokrat nic."
+  life-victim-min: "<yellow><white>%player%</white> ma uz jen 1 srdce, nemas z nej co ukrast."
   life-lost: "<red>Byl jsi zabit hracem <white>%player%</white> a prisel jsi o zivot."
   items-kept: "<gray>%player% si necha vsechny veci, nemuzes mu je vzit."

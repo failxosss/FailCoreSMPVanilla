@@ -101,6 +101,13 @@ public final class RecipeManager implements Listener {
             r.setIngredient('C', Material.CHEST);
             addRecipe(r, r.getKey());
         }
+        if (c.getBoolean("recipes.notch-apple", true)) {
+            ShapedRecipe r = new ShapedRecipe(key("notch_apple"), new ItemStack(Material.ENCHANTED_GOLDEN_APPLE));
+            r.shape(" G ", "GNG", " G ");
+            r.setIngredient('G', Material.GOLD_BLOCK);
+            r.setIngredient('N', Material.NETHERITE_INGOT);
+            addRecipe(r, r.getKey());
+        }
     }
 
     // ---------- vlastni recepty z configu ----------

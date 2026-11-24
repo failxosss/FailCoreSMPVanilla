@@ -1,0 +1,127 @@
+# FailCoreSMPVanilla - by Failxos (Minecraft 1.21.11)
+# Zpravy pouzivaji MiniMessage: https://docs.advntr.dev/minimessage/format.html
+# Permission failcoresmpvanilla.bypass obejde vsechna omezeni.
+
+# S elytrou na sobe nejde mit mace v ruce
+elytra-mace:
+  enabled: true
+
+# Na mace nejde dat enchant (kovadlina + enchanting table)
+mace:
+  block-enchants: true
+
+# Zakazane itemy - hned jak je hrac vezme do ruky, zmizi a napise se mu zprava
+banned-items:
+  enabled: true
+  materials:
+    - MINECART
+    - CHEST_MINECART
+    - FURNACE_MINECART
+    - HOPPER_MINECART
+    - TNT_MINECART
+    - COMMAND_BLOCK_MINECART
+  # klic potionu (potion, splash, lingering i tipped arrow)
+  potions:
+    - turtle_master
+
+# Cooldowny v sekundach
+cooldowns:
+  ender-pearl: 30
+  wind-charge: 5
+
+# Combat tag
+combat:
+  enabled: true
+  duration-seconds: 30
+  tag-attacker: true       # oznaci i toho, kdo uderil
+  kill-on-logout: true     # odpojeni v combatu = smrt
+  allowed-commands: []     # prikazy povolene v combatu (bez /), napr. [msg, r]
+
+# PvP smrt: zabity hrac si nechava veci, zabijak mu je nevezme
+pvp:
+  keep-items-on-death: true
+
+# Zivot navic za zabiti hrace (1 srdce = 2 HP)
+life:
+  enabled: true
+  gain-hp: 2.0
+  max-hp: 40.0
+  victim-loses-hp: 0.0     # kolik HP ztrati zabity (0 = nic)
+  min-hp: 2.0
+  same-victim-cooldown-seconds: 600
+
+# Villageri / wandering trader - trady se nikdy nevycerpaji
+villagers:
+  unlimited-trades: true
+
+# Ochrana proti string duperum
+string-dupe:
+  enabled: true
+  block-piston-tripwire: true   # piston nezniči tripwire (hlavni zdroj duperu)
+  limit-spawns: true            # limit itemu stringu na chunk
+  max-per-chunk: 256
+  window-seconds: 10
+
+# Craftingy (po vypnuti vanilla receptu je potreba restart)
+recipes:
+  golden-apple: true                  # jablko + 4 gold ingoty
+  anvil: true                         # 7 iron ingotu
+  cobweb: true                        # 9 string -> 4 cobweb
+  netherite-template-with-ingot: true # misto sablony staci netherite ingot
+
+# ---------- VLASTNI RECEPTY ----------
+# Pridej si vlastni craftingy. Nacte se po restartu nebo po /failcoresmpvanilla reload.
+# Nazvy materialu: https://jd.papermc.io/paper/1.21.11/org/bukkit/Material.html
+# Kazdy recept ma unikatni nazev (klic). Vypnout ho muzes pomoci enabled: false.
+
+# Vanilla recepty, ktere se smazou (napr. [golden_apple, "minecraft:anvil"]).
+# Vraceni zpet funguje az po restartu serveru.
+remove-vanilla-recipes: []
+
+custom-recipes:
+  priklad_tvarovy:
+    enabled: false
+    type: shaped            # shaped = presny tvar
+    result: DIAMOND_SWORD
+    amount: 1
+    name: "<aqua>Super meč"  # volitelne, MiniMessage
+    shape:                  # 1-3 radky po 1-3 znacich, mezera = prazdny slot
+      - " D "
+      - " D "
+      - " S "
+    ingredients:            # znak: MATERIAL
+      D: DIAMOND
+      S: STICK
+  priklad_bez_tvaru:
+    enabled: false
+    type: shapeless         # shapeless = na poradi nezalezi
+    result: GOLDEN_APPLE
+    amount: 2
+    ingredients: [GOLD_INGOT, GOLD_INGOT, APPLE]   # 1-9 itemu
+
+rules:
+  - "<gold><bold>Pravidla serveru</bold>"
+  - "<red>1.</red> <white>Krast je zakazano."
+  - "<red>2.</red> <white>Griefovani je zakazano."
+  - "<red>3.</red> <white>Elytra + mace nejde dohromady."
+  - "<red>4.</red> <white>V combatu se neodpojuj - zabije te to."
+
+messages:
+  prefix: "<dark_gray>[<gold>FailCore</gold>]</dark_gray> "
+  no-permission: "<red>Na to nemas opravneni."
+  reloaded: "<green>Konfigurace nactena znovu."
+  usage: "<yellow>Pouziti: /failcoresmpvanilla [reload|info]"
+  elytra-mace: "<red>S elytrou na sobe nemuzes drzet mace!"
+  banned-item: "<red>Item <white>%item%</white> je na serveru zakazan a byl ti odebran."
+  pearl-cooldown: "<red>Ender perlu muzes pouzit za <white>%time%s</white>."
+  wind-cooldown: "<red>Wind charge muzes pouzit za <white>%time%s</white>."
+  combat-start: "<red>Jsi v combatu s <white>%player%</white>! Neodpojuj se, zabije te to. (<white>%time%s</white>)"
+  combat-actionbar: "<red>Combat: <white>%time%s"
+  combat-end: "<green>Combat skoncil, muzes se odpojit."
+  combat-command-blocked: "<red>V combatu nemuzes pouzivat prikazy!"
+  combat-logout: "<red>%player% se odpojil v combatu a byl zabit."
+  life-gained: "<green>Zabil jsi <white>%player%</white> a ziskal jsi zivot navic! Mas <white>%hearts%</white> srdci."
+  life-max: "<yellow>Uz mas maximum zivotu."
+  life-cooldown: "<yellow>Za <white>%player%</white> jsi zivot dostal nedavno, tentokrat nic."
+  life-lost: "<red>Byl jsi zabit hracem <white>%player%</white> a prisel jsi o zivot."
+  items-kept: "<gray>%player% si necha vsechny veci, nemuzes mu je vzit."

@@ -1,0 +1,28 @@
+name: FailCoreSMPVanilla
+version: '${project.version}'
+main: cz.failxos.failcoresmpvanilla.FailCoreSMPVanilla
+api-version: '1.21.11'
+author: Failxos
+description: SMP pravidla, combat tag, recepty a dalsi
+load: POSTWORLD
+
+commands:
+  failcoresmpvanilla:
+    description: Hlavni prikaz pluginu FailCoreSMPVanilla
+    usage: /<command> [reload|info]
+    aliases: [failcore, fsmp]
+  rules:
+    description: Pravidla serveru
+    usage: /<command>
+    permission: failcoresmpvanilla.rules
+
+permissions:
+  failcoresmpvanilla.admin:
+    description: Reload a sprava pluginu
+    default: op
+  failcoresmpvanilla.bypass:
+    description: Obejde vsechna omezeni pluginu
+    default: false
+  failcoresmpvanilla.rules:
+    description: Zobrazeni pravidel
+    default: true

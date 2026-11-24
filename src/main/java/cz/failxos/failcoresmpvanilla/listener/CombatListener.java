@@ -28,6 +28,8 @@ public final class CombatListener implements Listener {
     private final FailCoreSMPVanilla plugin;
     private final Map<UUID, Long> tagged = new HashMap<>();
     private final Set<UUID> logoutDeaths = new HashSet<>();
+    /** hrac -> s kym je v combatu (po smrti/odpojeni soupere se combat zrusi) */
+    private final Map<UUID, Set<UUID>> opponents = new HashMap<>();
 
     public CombatListener(FailCoreSMPVanilla plugin) {
         this.plugin = plugin;
@@ -50,6 +52,28 @@ public final class CombatListener implements Listener {
 
     public void clear() {
         tagged.clear();
+        opponents.clear();
+    }
+
+    /** Hrac zemrel / odpojil se: zrusi se combat jemu i vsem, kdo byli v combatu uz jen s nim. */
+    private void release(UUID gone) {
+        tagged.remove(gone);
+        opponents.remove(gone);
+        Iterator<Map.Entry<UUID, Set<UUID>>> it = opponents.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<UUID, Set<UUID>> entry = it.next();
+            entry.getValue().remove(gone);
+            if (!entry.getValue().isEmpty()) {
+                continue;
+            }
+            it.remove();
+            if (tagged.remove(entry.getKey()) != null) {
+                Player other = Bukkit.getPlayer(entry.getKey());
+                if (other != null && other.isOnline()) {
+                    plugin.messages().send(other, "combat-end");
+                }
+            }
+        }
     }
 
     private static Player attackerOf(Entity damager) {
@@ -62,17 +86,18 @@ public final class CombatListener implements Listener {
         return null;
     }
 
-    private void tag(Player p, String opponent) {
+    private void tag(Player p, Player opponent) {
         if (p.hasPermission(FailCoreSMPVanilla.BYPASS)
                 || p.getGameMode() == GameMode.CREATIVE
                 || p.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
+        opponents.computeIfAbsent(p.getUniqueId(), k -> new HashSet<>()).add(opponent.getUniqueId());
         int seconds = plugin.getConfig().getInt("combat.duration-seconds", 30);
         boolean already = isTagged(p);
         tagged.put(p.getUniqueId(), System.currentTimeMillis() + seconds * 1000L);
         if (!already) {
-            plugin.messages().send(p, "combat-start", "%player%", opponent, "%time%", String.valueOf(seconds));
+            plugin.messages().send(p, "combat-start", "%player%", opponent.getName(), "%time%", String.valueOf(seconds));
         }
         plugin.messages().actionBar(p, "combat-actionbar", "%time%", String.valueOf(seconds));
     }
@@ -89,9 +114,9 @@ public final class CombatListener implements Listener {
         if (attacker == null || attacker.equals(victim)) {
             return;
         }
-        tag(victim, attacker.getName());
+        tag(victim, attacker);
         if (plugin.getConfig().getBoolean("combat.tag-attacker", true)) {
-            tag(attacker, victim.getName());
+            tag(attacker, victim);
         }
     }
 
@@ -123,7 +148,7 @@ public final class CombatListener implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
         boolean wasTagged = isTagged(p);
-        tagged.remove(p.getUniqueId());
+        release(p.getUniqueId());
         if (!wasTagged || !enabled() || p.isDead() || p.hasPermission(FailCoreSMPVanilla.BYPASS)) {
             return;
         }
@@ -146,7 +171,7 @@ public final class CombatListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        tagged.remove(e.getEntity().getUniqueId());
+        release(e.getEntity().getUniqueId());
     }
 
     private void tick() {
@@ -157,11 +182,13 @@ public final class CombatListener implements Listener {
             Player p = Bukkit.getPlayer(entry.getKey());
             if (p == null || !p.isOnline()) {
                 it.remove();
+                opponents.remove(entry.getKey());
                 continue;
             }
             long left = entry.getValue() - now;
             if (left <= 0) {
                 it.remove();
+                opponents.remove(entry.getKey());
                 plugin.messages().send(p, "combat-end");
             } else {
                 plugin.messages().actionBar(p, "combat-actionbar", "%time%", String.valueOf((left + 999L) / 1000L));

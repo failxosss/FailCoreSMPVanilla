@@ -4,9 +4,9 @@ import cz.failxos.failcoresmpvanilla.listener.BannedItemsListener;
 import cz.failxos.failcoresmpvanilla.listener.CombatListener;
 import cz.failxos.failcoresmpvanilla.listener.CooldownListener;
 import cz.failxos.failcoresmpvanilla.listener.ElytraMaceListener;
+import cz.failxos.failcoresmpvanilla.listener.HeartItemListener;
 import cz.failxos.failcoresmpvanilla.listener.LifeListener;
 import cz.failxos.failcoresmpvanilla.listener.MaceEnchantListener;
-import cz.failxos.failcoresmpvanilla.listener.StringDupeListener;
 import cz.failxos.failcoresmpvanilla.listener.VillagerListener;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
@@ -40,8 +40,8 @@ public final class FailCoreSMPVanilla extends JavaPlugin {
         pm.registerEvents(new MaceEnchantListener(this), this);
         pm.registerEvents(new CooldownListener(this), this);
         pm.registerEvents(new LifeListener(this, combat), this);
+        pm.registerEvents(new HeartItemListener(this), this);
         pm.registerEvents(new VillagerListener(this), this);
-        pm.registerEvents(new StringDupeListener(this), this);
 
         FailCoreSMPVanillaCommand handler = new FailCoreSMPVanillaCommand(this);
         PluginCommand main = getCommand("failcoresmpvanilla");

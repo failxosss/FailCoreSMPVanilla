@@ -85,6 +85,22 @@ public final class RecipeManager implements Listener {
             r.setIngredient('N', Material.NETHERRACK);
             addRecipe(r, r.getKey());
         }
+        if (c.getBoolean("recipes.ender-chest", true)) {
+            Bukkit.removeRecipe(NamespacedKey.minecraft("ender_chest"));
+            ShapedRecipe r = new ShapedRecipe(key("ender_chest"), new ItemStack(Material.ENDER_CHEST));
+            r.shape(" O ", "OEO", " O ");
+            r.setIngredient('O', Material.OBSIDIAN);
+            r.setIngredient('E', Material.ENDER_EYE);
+            addRecipe(r, r.getKey());
+        }
+        if (c.getBoolean("recipes.shulker-box", true)) {
+            Bukkit.removeRecipe(NamespacedKey.minecraft("shulker_box"));
+            ShapedRecipe r = new ShapedRecipe(key("shulker_box"), new ItemStack(Material.SHULKER_BOX));
+            r.shape(" D ", "DCD", " D ");
+            r.setIngredient('D', Material.DIAMOND);
+            r.setIngredient('C', Material.CHEST);
+            addRecipe(r, r.getKey());
+        }
     }
 
     // ---------- vlastni recepty z configu ----------

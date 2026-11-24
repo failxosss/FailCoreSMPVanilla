@@ -17,3 +17,6 @@ Vše se nastavuje v `plugins/FailCoreSMPVanilla/config.yml`.
 
 ## Vlastní recepty
 V `config.yml` v sekci `custom-recipes` si můžeš přidat vlastní craftingy (tvarové i bez tvaru), nebo smazat vanilla recepty přes `remove-vanilla-recipes`. Příklady jsou přímo v configu. Načtou se po restartu nebo po `/failcoresmpvanilla reload`.
+
+## Srdce
+Za zabití hráče dostane zabíjející item **Srdce** (beetroot, nejde sníst). Zabitý hráč s více než 10 srdci o jedno přijde (nikdy pod 10) a při smrti dropne 30 % srdcí nad 10. Vše v sekcích `heart-item` a `life`.

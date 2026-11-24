@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-/** S elytrou na sobe nejde mit mace v ruce. */
+/** S elytrou na sobe nejde mit mace ani spear (kopi) v ruce. */
 public final class ElytraMaceListener implements Listener {
 
     private final FailCoreSMPVanilla plugin;
@@ -22,11 +22,31 @@ public final class ElytraMaceListener implements Listener {
     }
 
     private boolean enabled() {
-        return plugin.getConfig().getBoolean("elytra-mace.enabled", true);
+        return plugin.getConfig().getBoolean("elytra-mace.enabled", true)
+                || plugin.getConfig().getBoolean("elytra-spear.enabled", true);
     }
 
     private static boolean isMace(ItemStack item) {
         return item != null && item.getType() == Material.MACE;
+    }
+
+    /** Vsechny spears (wooden, stone, copper, iron, golden, diamond, netherite). */
+    private static boolean isSpear(ItemStack item) {
+        return item != null && item.getType().name().endsWith("_SPEAR");
+    }
+
+    private boolean isRestricted(ItemStack item) {
+        if (isMace(item)) {
+            return plugin.getConfig().getBoolean("elytra-mace.enabled", true);
+        }
+        if (isSpear(item)) {
+            return plugin.getConfig().getBoolean("elytra-spear.enabled", true);
+        }
+        return false;
+    }
+
+    private void warn(Player p, ItemStack item) {
+        plugin.messages().send(p, isSpear(item) ? "elytra-spear" : "elytra-mace");
     }
 
     private static boolean wearsElytra(Player p) {
@@ -44,9 +64,10 @@ public final class ElytraMaceListener implements Listener {
         if (!applies(p)) {
             return;
         }
-        if (isMace(p.getInventory().getItem(e.getNewSlot()))) {
+        ItemStack target = p.getInventory().getItem(e.getNewSlot());
+        if (isRestricted(target)) {
             e.setCancelled(true);
-            plugin.messages().send(p, "elytra-mace");
+            warn(p, target);
         }
     }
 
@@ -56,9 +77,11 @@ public final class ElytraMaceListener implements Listener {
         if (!applies(p)) {
             return;
         }
-        if (isMace(e.getMainHandItem()) || isMace(e.getOffHandItem())) {
+        ItemStack bad = isRestricted(e.getMainHandItem()) ? e.getMainHandItem()
+                : isRestricted(e.getOffHandItem()) ? e.getOffHandItem() : null;
+        if (bad != null) {
             e.setCancelled(true);
-            plugin.messages().send(p, "elytra-mace");
+            warn(p, bad);
         }
     }
 
@@ -72,8 +95,8 @@ public final class ElytraMaceListener implements Listener {
                 continue;
             }
             PlayerInventory inv = p.getInventory();
-            boolean main = isMace(inv.getItemInMainHand());
-            boolean off = isMace(inv.getItemInOffHand());
+            boolean main = isRestricted(inv.getItemInMainHand());
+            boolean off = isRestricted(inv.getItemInOffHand());
             if (!main && !off) {
                 continue;
             }
@@ -92,7 +115,7 @@ public final class ElytraMaceListener implements Listener {
     private void evict(Player p, boolean offHand) {
         PlayerInventory inv = p.getInventory();
         ItemStack item = offHand ? inv.getItemInOffHand() : inv.getItemInMainHand();
-        if (!isMace(item)) {
+        if (!isRestricted(item)) {
             return;
         }
         if (offHand) {
@@ -122,7 +145,7 @@ public final class ElytraMaceListener implements Listener {
         } else {
             p.getWorld().dropItemNaturally(p.getLocation(), item);
         }
-        plugin.messages().send(p, "elytra-mace");
+        warn(p, item);
     }
 
     private static boolean isEmpty(ItemStack item) {

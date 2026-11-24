@@ -6,6 +6,10 @@
 elytra-mace:
   enabled: true
 
+# S elytrou na sobe nejde mit spear (kopi) v ruce
+elytra-spear:
+  enabled: true
+
 # Na mace nejde dat enchant (kovadlina + enchanting table)
 mace:
   block-enchants: true
@@ -41,29 +45,30 @@ combat:
 pvp:
   keep-items-on-death: true
 
-# Zivot navic za zabiti hrace (1 srdce = 2 HP)
+# Srdce: za zabiti hrace dostane zabijak do inventare item "Srdce" (ne hned zivot)
+heart-item:
+  material: BEETROOT
+  name: "<red>Srdce"
+  # volitelne: klic item modelu z resource packu (napr. "failcore:heart"), prazdne = vanilla beetroot
+  item-model: ""
+
 life:
   enabled: true
-  gain-hp: 2.0
-  max-hp: 40.0
-  victim-loses-hp: 0.0     # kolik HP ztrati zabity (0 = nic)
-  min-hp: 2.0
-  same-victim-cooldown-seconds: 600
+  same-victim-cooldown-seconds: 600   # za stejnou obet se srdce znovu da az po case
+  min-hp: 20.0                        # 10 srdci - pod tuto hodnotu zivoty nikdy neklesnou
+  # zabity hrac (PvP) s vice nez min-hp: jedno srdce (2 HP) mu zmizi, pod min-hp nikdy
+  victim-loses-hp: 2.0
+  # pri smrti (jakekoli) s vice nez min-hp zivotu dropne tolik % srdci nad 10
+  death-drop-percent: 30.0
 
 # Villageri / wandering trader - trady se nikdy nevycerpaji
 villagers:
   unlimited-trades: true
 
-# Ochrana proti string duperum
-string-dupe:
-  enabled: true
-  block-piston-tripwire: true   # piston nezniči tripwire (hlavni zdroj duperu)
-  limit-spawns: true            # limit itemu stringu na chunk
-  max-per-chunk: 256
-  window-seconds: 10
-
 # Craftingy (po vypnuti vanilla receptu je potreba restart)
 recipes:
+  ender-chest: true                  # 4x obsidian + eye of ender (plus)
+  shulker-box: true                   # 4x diamant + chest (plus)
   golden-apple: true                  # jablko + 4 gold ingoty
   anvil: true                         # 7 iron ingotu
   cobweb: true                        # 9 string -> 4 cobweb
@@ -103,7 +108,7 @@ rules:
   - "<gold><bold>Pravidla serveru</bold>"
   - "<red>1.</red> <white>Krast je zakazano."
   - "<red>2.</red> <white>Griefovani je zakazano."
-  - "<red>3.</red> <white>Elytra + mace nejde dohromady."
+  - "<red>3.</red> <white>Elytra + mace / spear nejde dohromady."
   - "<red>4.</red> <white>V combatu se neodpojuj - zabije te to."
 
 messages:
@@ -112,6 +117,7 @@ messages:
   reloaded: "<green>Konfigurace nactena znovu."
   usage: "<yellow>Pouziti: /failcoresmpvanilla [reload|info]"
   elytra-mace: "<red>S elytrou na sobe nemuzes drzet mace!"
+  elytra-spear: "<red>S elytrou na sobe nemuzes drzet spear!"
   banned-item: "<red>Item <white>%item%</white> je na serveru zakazan a byl ti odebran."
   pearl-cooldown: "<red>Ender perlu muzes pouzit za <white>%time%s</white>."
   wind-cooldown: "<red>Wind charge muzes pouzit za <white>%time%s</white>."
@@ -120,8 +126,7 @@ messages:
   combat-end: "<green>Combat skoncil, muzes se odpojit."
   combat-command-blocked: "<red>V combatu nemuzes pouzivat prikazy!"
   combat-logout: "<red>%player% se odpojil v combatu a byl zabit."
-  life-gained: "<green>Zabil jsi <white>%player%</white> a ziskal jsi zivot navic! Mas <white>%hearts%</white> srdci."
-  life-max: "<yellow>Uz mas maximum zivotu."
+  life-gained: "<green>Zabil jsi <white>%player%</white> a dostal jsi <red>srdce</red>."
   life-cooldown: "<yellow>Za <white>%player%</white> jsi zivot dostal nedavno, tentokrat nic."
   life-lost: "<red>Byl jsi zabit hracem <white>%player%</white> a prisel jsi o zivot."
   items-kept: "<gray>%player% si necha vsechny veci, nemuzes mu je vzit."

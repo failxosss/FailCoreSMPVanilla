@@ -78,7 +78,7 @@ recipes:
   anvil: true                         # 7 iron ingotu
   cobweb: true                        # 9 string -> 4 cobweb
   netherite-template-with-ingot: true # misto sablony staci netherite ingot
-  heart: true                         # 4x nether wart + 4x netherite ingot + golden apple = Srdce (pravy klik = +1 srdce)
+  heart: true                         # 4x nether wart + 4x netherite ingot + enchanted golden apple = Srdce (pravy klik = +1 srdce)
 
 # ---------- VLASTNI RECEPTY ----------
 # Pridej si vlastni craftingy. Nacte se po restartu nebo po /failcoresmpvanilla reload.

@@ -108,6 +108,16 @@ public final class RecipeManager implements Listener {
             r.setIngredient('N', Material.NETHERITE_INGOT);
             addRecipe(r, r.getKey());
         }
+
+        // Srdce: 4x nether wart + 4x netherite ingot + golden apple
+        if (c.getBoolean("recipes.heart", true)) {
+            ShapedRecipe r = new ShapedRecipe(key("heart"), HeartItem.create(plugin, 1));
+            r.shape("WNW", "NAN", "WNW");
+            r.setIngredient('W', Material.NETHER_WART);
+            r.setIngredient('N', Material.NETHERITE_INGOT);
+            r.setIngredient('A', Material.GOLDEN_APPLE);
+            addRecipe(r, r.getKey());
+        }
     }
 
     // ---------- vlastni recepty z configu ----------

@@ -21,7 +21,7 @@ permissions:
     description: Reload a sprava pluginu
     default: op
   failcoresmpvanilla.bypass:
-    description: Obejde vsechna omezeni pluginu
+    description: Obejde omezeni pluginu krome LifeSteal
     default: false
   failcoresmpvanilla.rules:
     description: Zobrazeni pravidel

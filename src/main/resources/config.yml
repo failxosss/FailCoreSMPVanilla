@@ -54,16 +54,11 @@ heart-item:
 
 life:
   enabled: true
-  same-victim-cooldown-seconds: 600   # za stejnou obet se srdce znovu da az po case
-  max-hp: 40.0                        # maximum zivotu (20 srdci) pri pouzivani srdci
-  min-hp: 2.0                         # 1 srdce - pod tuto hodnotu zivoty nikdy neklesnou
-  # LifeSteal: zabity hrac (PvP) prijde o jedno srdce (2 HP), pod min-hp nikdy
-  victim-loses-hp: 2.0
-  # srdce dostane zabijak jen kdyz ho obet opravdu ztratila (obet na 1 srdci = nic k ukradeni)
-  steal-only-if-victim-has-hearts: true
-  # pri smrti (jakekoli) s vice nez death-drop-above-hp zivotu dropne tolik % srdci nad touto hranici
-  death-drop-above-hp: 20.0           # 10 srdci
-  death-drop-percent: 30.0
+  max-hp: 60.0  # 30 srdci pri pouzivani itemu
+  min-hp: 2.0   # 1 srdce; pokud neni co ukrast, odmena nevznikne
+  # Kazda PvP smrt: presne 2 HP obeti -> 1 item Srdce vitezi.
+  # Cooldown pro stejneho zabijaka a obet, v sekundach (0 = vypnuto).
+  same-victim-cooldown-seconds: 30
 
 # Villageri / wandering trader - trady se nikdy nevycerpaji
 villagers:
@@ -132,10 +127,10 @@ messages:
   combat-end: "<green>Combat skoncil, muzes se odpojit."
   combat-command-blocked: "<red>V combatu nemuzes pouzivat prikazy!"
   combat-logout: "<red>%player% se odpojil v combatu a byl zabit."
+  life-cooldown: "<yellow>Od hrace <white>%player%</white> muzes ziskat dalsi srdce za <white>%time%s</white>."
   life-gained: "<green>Zabil jsi <white>%player%</white> a dostal jsi <red>srdce</red>."
   life-used: "<green>Pouzil jsi srdce. Mas <white>%hearts%</white> srdci."
   life-max: "<yellow>Uz mas maximum zivotu."
-  life-cooldown: "<yellow>Za <white>%player%</white> jsi zivot dostal nedavno, tentokrat nic."
-  life-victim-min: "<yellow><white>%player%</white> ma uz jen 1 srdce, nemas z nej co ukrast."
+  life-victim-min: "<yellow><white>%player%</white> nema dalsi cele srdce k ukradeni."
   life-lost: "<red>Byl jsi zabit hracem <white>%player%</white> a prisel jsi o zivot."
   items-kept: "<gray>%player% si necha vsechny veci, nemuzes mu je vzit."

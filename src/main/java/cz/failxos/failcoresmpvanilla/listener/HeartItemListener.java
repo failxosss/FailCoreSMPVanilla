@@ -64,7 +64,7 @@ public final class HeartItemListener implements Listener {
         if (attr == null) {
             return;
         }
-        double max = plugin.getConfig().getDouble("life.max-hp", 40.0);
+        double max = plugin.getConfig().getDouble("life.max-hp", 60.0);
         double base = attr.getBaseValue();
         if (base >= max) {
             plugin.messages().send(p, "life-max");

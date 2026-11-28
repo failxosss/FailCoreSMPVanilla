@@ -16,7 +16,7 @@ commands:
     usage: /<command>
     permission: failcoresmpvanilla.rules
 
-  withdrawmoney:
+  withdrawsrdce:
     description: Vybere jedno srdce do ruky
     usage: /<command>
 

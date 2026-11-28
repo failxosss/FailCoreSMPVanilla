@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public final class WithdrawMoneyCommand implements CommandExecutor {
+public final class WithdrawSrdceCommand implements CommandExecutor {
     private final FailCoreSMPVanilla plugin;
-    public WithdrawMoneyCommand(FailCoreSMPVanilla plugin) { this.plugin = plugin; }
+    public WithdrawSrdceCommand(FailCoreSMPVanilla plugin) { this.plugin = plugin; }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

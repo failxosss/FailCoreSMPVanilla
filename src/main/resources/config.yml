@@ -134,3 +134,9 @@ messages:
   life-victim-min: "<yellow><white>%player%</white> nema dalsi cele srdce k ukradeni."
   life-lost: "<red>Byl jsi zabit hracem <white>%player%</white> a prisel jsi o zivot."
   items-kept: "<gray>%player% si necha vsechny veci, nemuzes mu je vzit."
+
+  withdraw-player-only: "<red>Tento prikaz je pouze pro hrace."
+  withdraw-disabled: "<red>System srdci je vypnuty."
+  withdraw-min: "<red>Posledni srdce nemuzes vybrat."
+  withdraw-full: "<red>Uvolni misto v inventari nebo v ruce."
+  withdraw-success: "<green>Vybral jsi jedno srdce. Zbyva ti <white>%hearts%</white> srdci."

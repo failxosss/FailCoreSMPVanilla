@@ -54,6 +54,9 @@ public final class FailCoreSMPVanilla extends JavaPlugin {
             rules.setExecutor(handler);
         }
 
+        PluginCommand withdraw = getCommand("withdrawmoney");
+        if (withdraw != null) withdraw.setExecutor(new WithdrawMoneyCommand(this));
+
         getLogger().info("FailCoreSMPVanilla " + getPluginMeta().getVersion() + " by Failxos nacten.");
     }
 

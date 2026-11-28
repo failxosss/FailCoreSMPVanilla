@@ -4,7 +4,7 @@ Plugin pro Paper **1.21.11** (Java 21) – autor **Failxos**.
 
 ## Build
 - GitHub: nahraj složku na GitHub → záložka **Actions** → *Build* → stáhni artifact `FailCoreSMPVanilla` (jar).
-- Lokálně: `mvn clean package` → `target/FailCoreSMPVanilla-1.0.3.jar`
+- Lokálně: `mvn clean package` → `target/FailCoreSMPVanilla-1.0.5.jar`
 
 ## Příkazy
 - `/failcoresmpvanilla [info|reload]` (permission `failcoresmpvanilla.admin`)
@@ -23,3 +23,8 @@ Za zabití hráče dostane zabíjející item **Srdce** (beetroot, nejde sníst)
 
 ## Recepty
 Ender chest (4× obsidian + eye of ender), shulker box (4× diamant + chest), enchanted golden apple (4× gold block + netherite ingot) – vše do plusu.
+
+### /withdrawmoney
+Vybere jedno vlastni maximalni srdce jako item do hlavni ruky. Minimalne jedno srdce zustane. Pri plnem inventari a obsazene ruce se vyber neprovede. V combatu plati stavajici blokovani prikazu.
+
+Prikaz /withdrawmoney nevyzaduje zadne opravneni.
